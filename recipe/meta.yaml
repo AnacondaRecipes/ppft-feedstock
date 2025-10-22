@@ -21,17 +21,23 @@ requirements:
     - setuptools >=42
   run:
     - python
-    - six >=1.7.3
   run_constrained:
     - dill >=0.4.0
 
 test:
-  requires:
-    - pip
   imports:
     - ppft
+    - ppft.auto
+    - ppft.common
+    - ppft.server
+    - ppft.transport
+    - ppft.worker   
+  requires:
+    - pip
   commands:
     - pip check
+    - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
+    - python -m ppft.tests
 
 about:
   home: https://github.com/uqfoundation/ppft
