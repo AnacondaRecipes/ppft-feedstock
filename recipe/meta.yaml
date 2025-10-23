@@ -1,13 +1,13 @@
 {% set name = "ppft" %}
-{% set version = "1.7.6.7" %}
+{% set version = "1.7.7" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: ab34436814e2f18238f35688fd869b2641b2d2d8dca22b8d246f6701dfc954c8
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: f3f77448cfe24c2b8d2296b6d8732280b25041a3f3e1f551856c6451d3e01b96
 
 build:
   number: 0
@@ -18,21 +18,27 @@ requirements:
   host:
     - python
     - pip
-    - setuptools
+    - setuptools >=42
     - wheel
   run:
     - python
-    - six >=1.7.3
   run_constrained:
-    - dill >=0.3.7
+    - dill >=0.4.0
 
 test:
-  requires:
-    - pip
   imports:
     - ppft
+    - ppft.auto
+    - ppft.common
+    - ppft.server
+    - ppft.transport
+    - ppft.worker   
+  requires:
+    - pip
   commands:
     - pip check
+    - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
+    - python -m ppft.tests
 
 about:
   home: https://github.com/uqfoundation/ppft
@@ -41,10 +47,10 @@ about:
   license_file: LICENSE
   summary: distributed and parallel python
   description: |
-    ppft is a friendly fork of Parallel Python (pp). ppft extends Parallel Python 
-    to provide packaging and distribution with pip and setuptools, support for Python 3, 
-    and enhanced serialization using dill.source. ppft uses Parallel Python to provide 
-    mechanisms for the parallel execution of Python code on SMP (systems with multiple 
+    ppft is a friendly fork of Parallel Python (pp). ppft extends Parallel Python
+    to provide packaging and distribution with pip and setuptools, support for Python 3,
+    and enhanced serialization using dill.source. ppft uses Parallel Python to provide
+    mechanisms for the parallel execution of Python code on SMP (systems with multiple
     processors or cores) and clusters (computers connected via network).
   doc_url: https://ppft.readthedocs.io
   dev_url: https://github.com/uqfoundation/ppft
